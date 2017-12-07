@@ -1,0 +1,25 @@
+# <h1>
+## <h2>
+### <h3>
+#### <h4>
+##### <h5>
+###### <h6>
+<p>
+
+* or _ <i>
+** or __ <b>
+~~ <del>
+
+1. <ol>
+* or - or + <ul>
+
+[link text](link) <a href="link">link text</a>
+
+![alt text](link) <img alt="alt text" href="link"/>
+
+`code` <code>code</code>
+
+--- or ___ or *** <hr/>
+
+[Enter] <br/>
+[Enter] [Enter] </p><p>
