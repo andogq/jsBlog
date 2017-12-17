@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+#header {
+    height: 10%;
+    width: 100%;
+    background: grey;
+}
+
+#content {
+    width: 80%;
+    padding-left: 10%;
+}
+
+#header > * {
+    display: inline-block;
+}
+
+#title {
+    font-size: 2.7em;
+    width: 50%;
+    vertical-align: middle;
+}
+
+#menu {
+    font-size: 1.5em;
+    width: 49%;
+    height: 50%;
+    margin-top: 2.5%;
+    margin-right: 1%;
+    text-align: right;
+    float: right;
+}
+
+.postPreview {
+    padding: 10px;
+    border: 3px solid grey;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.heading {
+    width: 80%;
+}
+
+.date {
+    width: 19%;
+    text-align: right;
+    padding-right: 1%;
+    float: right;
+}
+
+.heading, .date {
+    display: inline-block;
+}
