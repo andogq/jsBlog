@@ -6,6 +6,27 @@ function appendRandomId(baseUrl) {
     let randomId = Math.random().toString().split(".")[1];
     return baseUrl + "?" + randomId;
 }
+
+// Gets the md file for a particular post
+function getPost(post, callback) {
+    // Prepare request
+    let request = new XMLHttpRequest();
+
+    // Prepare callback
+    request.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Callback
+            callback(this.responseText);
+        }
+    }
+    // Add unique number to prevent caching
+    let postLink = "posts/" + appendRandomId(post.link);
+
+    // Send the request
+    request.open("GET", postLink, true);
+    request.send();
+}
+
 // Sends request for the post list
 function loadPostList() {
     var request = new XMLHttpRequest();
