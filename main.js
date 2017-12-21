@@ -1,6 +1,11 @@
 // Global varibale
 let postList;
 
+// Adds a random id to the end of a URL, to prevent caching
+function appendRandomId(baseUrl) {
+    let randomId = Math.random().toString().split(".")[1];
+    return baseUrl + "?" + randomId;
+}
 // Sends request for the post list
 function loadPostList() {
     var request = new XMLHttpRequest();
@@ -13,9 +18,8 @@ function loadPostList() {
         }
     }
 
-    // Append random ID to the end of the file to make sure it doesn't cache
-    let randomId = Math.random().toString().split(".")[1];
-    let filePath = "posts/postList.txt?" + randomId;
+    // Add a random number to the end of the file to prevent caching
+    let filePath = appendRandomId("posts/postList.txt");
 
     // Set up and send the request
     request.open("GET", filePath, true);
