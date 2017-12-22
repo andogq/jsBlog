@@ -7,6 +7,41 @@ function appendRandomId(baseUrl) {
     return baseUrl + "?" + randomId;
 }
 
+// Strips all white space, #, -, *, _, +, ---, ___ and *** from the start and `, links, *, _, **, __ and ~~ throughout
+function stripAll(string) {
+    // Trim white space
+    string = string.trim();
+
+    // Split string and trim from start
+    string = string.split(" ");
+
+    // Strings with multiple characters need to be done before the single characters
+    string[0] = string[0].replace("---", "");
+    string[0] = string[0].replace("***", "");
+    string[0] = string[0].replace("___", "");
+
+    // Single character section
+    string[0] = string[0].replace("#", "");
+    string[0] = string[0].replace("-", "");
+    string[0] = string[0].replace("*", "");
+    string[0] = string[0].replace("_", "");
+    string[0] = string[0].replace("+", "");
+
+    // Join string back together
+    string = string.join(" ");
+
+    // Trim things from within string
+    string = string.replace("`", "");
+    string = string.replace("*", "");
+    string = string.replace("_", "");
+    string = string.replace("**", "");
+    string = string.replace("__", "");
+    string = string.replace("~~", "");
+
+    // Return string
+    return string;
+}
+
 // Gets the md file for a particular post
 function getPost(post, callback) {
     // Prepare request
