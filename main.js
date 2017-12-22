@@ -62,15 +62,72 @@ function getPost(post, callback) {
     request.send();
 }
 
+// Displays all the posts from the post list with a preview
+function displayPostList() {
+    // For each post
+    for (postId=0; postId < postList.length; postId++) {
+        let currentPost = postList[postId];
+
+        // Get the md for the post
+        getPost(currentPost, function(mdFile) {
+
+            // Make the preview
+            // Outer div
+            let postPreview = document.createElement("div");
+            postPreview.classList.add("postPreview");
+
+            // Heading
+            let heading = document.createElement("h2");
+            heading.classList.add("heading");
+            heading.innerText = currentPost.title;
+            postPreview.appendChild(heading);
+
+            // Date
+            let date = document.createElement("p");
+            date.classList.add("date");
+            date.innerText = currentPost.date;
+            postPreview.appendChild(date);
+
+            // hr
+            let hr = document.createElement("hr");
+            postPreview.appendChild(hr);
+
+            // Preview
+            let preview = document.createElement("div");
+            preview.classList.add("preview");
+
+            // Preview items (only 3)
+            // Break apart the md file for parsing line by line
+            let splitMdFile = mdFile.split("\n");
+            for (i=0; i < 3; i++) {
+                // Line element
+                let previewLine = document.createElement("p");
+                previewLine.innerText = stripAll(splitMdFile[i]);
+
+                // Append line to the parent div
+                preview.appendChild(previewLine);
+            }
+
+            // Append the preview
+            postPreview.appendChild(preview);
+
+            // Append the post preview to the content div
+            document.getElementById("content").appendChild(postPreview);
+        });
+    }
+}
+
 // Sends request for the post list
 function loadPostList() {
-    var request = new XMLHttpRequest();
+    let request = new XMLHttpRequest();
 
     // Preparing callback
     request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             // Call back
             postList = JSON.parse(this.responseText);
+
+            displayPostList();
         }
     }
 
