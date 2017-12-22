@@ -1,6 +1,9 @@
 // Global varibale
 let postList;
 
+// Elements
+let divContent = document.getElementById("content")
+
 // Adds a random id to the end of a URL, to prevent caching
 function appendRandomId(baseUrl) {
     let randomId = Math.random().toString().split(".")[1];
@@ -112,7 +115,7 @@ function displayPostList() {
             postPreview.appendChild(preview);
 
             // Append the post preview to the content div
-            document.getElementById("content").appendChild(postPreview);
+            divContent.appendChild(postPreview);
         });
     }
 }
