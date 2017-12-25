@@ -2,7 +2,7 @@
 let postList;
 
 // Elements
-let divContent = document.getElementById("content")
+let divContent = document.getElementById("content");
 
 // Adds a random id to the end of a URL, to prevent caching
 function appendRandomId(baseUrl) {
@@ -46,15 +46,16 @@ function stripAll(string) {
 }
 
 // Gets the md file for a particular post
-function getPost(post, callback) {
+function getPost(post, postId, callback) {
     // Prepare request
     let request = new XMLHttpRequest();
 
     // Prepare callback
     request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            // Callback
-            callback(this.responseText);
+            // Callback. Post Id is returned for reference
+            postList[postId].md = this.responseText;
+            callback(postId);
         }
     }
     // Add unique number to prevent caching
@@ -72,12 +73,16 @@ function displayPostList() {
         let currentPost = postList[postId];
 
         // Get the md for the post
-        getPost(currentPost, function(mdFile) {
+        getPost(currentPost, postId, function(postId) {
+            let thisPost = postList[postId];
 
             // Make the preview
             // Outer div
             let postPreview = document.createElement("div");
             postPreview.classList.add("postPreview");
+
+            // Add a meta tag with the post id
+            postPreview.postId = postId;
 
             // Heading
             let heading = document.createElement("h2");
@@ -101,7 +106,7 @@ function displayPostList() {
 
             // Preview items (only 3)
             // Break apart the md file for parsing line by line
-            let splitMdFile = mdFile.split("\n");
+            let splitMdFile = currentPost.md.split("\n");
             for (i=0; i < 3; i++) {
                 // Line element
                 let previewLine = document.createElement("p");
