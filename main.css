@@ -14,7 +14,7 @@ html, body {
     background: grey;
 }
 
-#content {
+#content, #postView {
     width: 80%;
     padding-left: 10%;
 }
@@ -39,6 +39,14 @@ html, body {
     float: right;
 }
 
+#postHeading {
+    font-size: 3em;
+}
+
+#postView {
+    margin-top: 1%;
+}
+
 .postPreview {
     padding: 10px;
     border: 3px solid grey;
@@ -46,7 +54,7 @@ html, body {
     margin: 10px;
 }
 
-.heading {
+.heading, #postHeading {
     width: 80%;
 }
 
@@ -57,6 +65,6 @@ html, body {
     float: right;
 }
 
-.heading, .date {
+.heading, .date, #postHeading {
     display: inline-block;
 }

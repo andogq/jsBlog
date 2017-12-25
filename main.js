@@ -66,6 +66,135 @@ function getPost(post, postId, callback) {
     request.send();
 }
 
+// Turn markdown into html elements
+function parseMarkdown(md) {
+    // Final elements
+    let finalElements = document.createElement("div");
+
+    // Split the file into lines
+    md = md.split("\n");
+
+    let isParagraph = false;
+
+    for (i=0; i<md.length; i++) {
+        // Line by line work out elements
+        let line = md[i].split(" ");
+        let firstSection = line[0];
+
+
+        // <hr/>
+        if ((firstSection == "---") || (firstSection == "___") || (firstSection == "***")) {
+            isParagraph = false;
+            finalElements.appendChild(document.createElement("hr"));
+        }
+
+        // Ends the paragraph totally
+        else if (firstSection == "" && isParagraph) {
+            isParagraph = false;
+        }
+
+        // Headings
+        else if (firstSection[0] == "#") {
+            isParagraph = false;
+            // Determine the heading size
+            let headingSize = firstSection.split("").length;
+            switch (headingSize) {
+                case 1:
+                headingSize = "h1";
+                break;
+
+                case 2:
+                headingSize = "h2";
+                break;
+
+                case 3:
+                headingSize = "h3";
+                break;
+
+                case 4:
+                headingSize = "h4";
+                break;
+
+                case 5:
+                headingSize = "h5";
+                break;
+
+                default:
+                headingSize: "h6";
+                break;
+            }
+
+            // Make the heading
+            let heading = document.createElement(headingSize);
+            // Get rid of the symbols at the start
+            line.shift();
+            heading.innerHTML = line.join(" ");
+            // Append it
+            finalElements.appendChild(heading);
+        }
+
+        // Paragraphs
+        else {
+            line = line.join(" ");
+            if (isParagraph) {
+                let length = finalElements.children.length - 1;
+                finalElements.children[length].innerHTML += "<br/>" + line;
+            } else {
+                isParagraph = true;
+
+                let paragraph = document.createElement("p");
+                paragraph.innerHTML = line;
+                finalElements.appendChild(paragraph);
+            }
+        }
+    }
+
+    return finalElements;
+}
+
+// Opens a window with the full post
+function displayFullPost(postId) {
+    // Hide the post list
+    divContent.style.display = "none";
+
+    // Get the current post details
+    let currentPost = postList[postId];
+
+    // Get the surrounding container
+    let postView = document.getElementById("postView");
+
+    // Make the header
+    let postHeader = document.createElement("div");
+    postHeader.id = "postHeader";
+
+    // Append the element
+    postView.appendChild(postHeader);
+
+    // Make the heading
+    let postHeading  = document.createElement("h1");
+    postHeading.id = "postHeading";
+    postHeading.innerHTML = currentPost.title;
+
+    // Append the heading
+    postHeader.appendChild(postHeading);
+
+    // Make the post date
+    let postDate = document.createElement("p");
+    postDate.classList.add("date");
+    postDate.innerHTML = currentPost.date;
+
+    // Append the date to the header
+    postHeader.appendChild(postDate);
+
+    // Add the horizontal rule
+    postHeader.appendChild(document.createElement("hr"));
+
+    // Do the markdown
+    let parsedMd = parseMarkdown(currentPost.md);
+
+    postView.appendChild(parsedMd);
+}
+
 // Displays all the posts from the post list with a preview
 function displayPostList() {
     // For each post
@@ -118,6 +247,11 @@ function displayPostList() {
 
             // Append the preview
             postPreview.appendChild(preview);
+
+            // Add the event listener
+            postPreview.onclick = function() {
+                displayFullPost(this.postId);
+            }
 
             // Append the post preview to the content div
             divContent.appendChild(postPreview);
