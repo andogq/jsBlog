@@ -16,25 +16,10 @@ function stripAll(string) {
     // Trim white space
     string = string.trim();
 
-    // Split string and trim from start
-    string = string.split(" ");
+    // Regexp which selects all the characters that need to be deleted
+    let regexpDelete = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
 
-    // Characters which will only be removed from the first section of the line
-    let strippedCharactersFirstSection = ["---", "***", "___", "#", "-", "*", "_", "+"]
-    // Characters which will be removed from the whole line
-    let strippedCharactersFullString = ["`", "*", "_", "**", "__", "~~"]
-
-    // Characters removed from the first section
-    for (j in strippedCharactersFirstSection) {
-        string[0] = string[0].replace(strippedCharactersFirstSection[j], "");
-    }
-
-    string = string.join(" ");
-
-    // Characters removed from the rest of the line
-    for (j in strippedCharactersFullString) {
-        string = string.replace(strippedCharactersFullString[j], "");
-    }
+    string = string.replace(regexpDelete, "$1$2");
 
     // Return string
     return string;
