@@ -54,14 +54,36 @@ function getPost(post, postId, callback) {
     });
 }
 
+// Function to create a DOM element in one line
+function makeElement(type, id, classList, innerHTML) {
+    // Create the element
+    let element = document.createElement(type);
+    // Any IDs that it has
+    if (id) {
+        element.id = id;
+    }
+    // Any classes that it has
+    if (classList) {
+        for (i in classList) {
+            element.classList.add(classList[i]);
+        }
+    }
+    // Add any innerHTML
+    if (innerHTML) {
+        element.innerHTML = innerHTML;
+    }
+    return element;
+}
+
 // Turn markdown into html elements
 function parseMarkdown(md) {
     // Final elements
-    let finalElements = document.createElement("div");
+    let finalElements = makeElement("div");
 
     // Split the file into lines
     md = md.split("\n");
 
+    // Used for terminating paragraph tags. Anything other than another blank line will break it
     let isParagraph = false;
 
     for (i in md) {
@@ -71,7 +93,7 @@ function parseMarkdown(md) {
         // <hr/>
         if (/^[-_*]{3}/g.test(line)) {
             isParagraph = false;
-            finalElements.appendChild(document.createElement("hr"));
+            finalElements.appendChild(makeElement("hr"));
         }
 
         // Ends the paragraph totally
@@ -84,16 +106,14 @@ function parseMarkdown(md) {
             isParagraph = false;
             // Determine the heading size
             let headingSize = line.split(" ")[0].length;
-            if (headingSize > 6) {
-                headingSize = 6;
-            }
-            headingSize = "h" + headingSize;
+            headingSize > 6 ? headingSize = "h6": headingSize = "h" + headingSize;
 
-            // Make the heading
-            let heading = document.createElement(headingSize);
             // Get rid of the symbols at the start
             line = line.replace(/^#+\s/g, "");
-            heading.innerHTML = line;
+
+            // Make the heading
+            let heading = makeElement(headingSize, undefined, undefined, line);
+
             // Append it
             finalElements.appendChild(heading);
         }
@@ -101,13 +121,12 @@ function parseMarkdown(md) {
         // Paragraphs
         else {
             if (isParagraph) {
-                let length = finalElements.children.length - 1;
-                finalElements.children[length].innerHTML += "<br/>" + line;
+                // Continuing on from another paragraph. Only add a line break
+                finalElements.lastChild.innerHTML += "<br/>" + line;
             } else {
+                // New paragraph totally
                 isParagraph = true;
-
-                let paragraph = document.createElement("p");
-                paragraph.innerHTML = line;
+                let paragraph = makeElement("p", undefined, undefined, line);
                 finalElements.appendChild(paragraph);
             }
         }
@@ -127,31 +146,17 @@ function displayFullPost(postId) {
     // Get the current post details
     let currentPost = postList[postId];
 
-    // Make the header
-    let postHeader = document.createElement("div");
-    postHeader.id = "postHeader";
+    // Make elements
+    let postHeader = makeElement("div", "postHeader");
+    let postHeading = makeElement("h1", "postHeading", undefined, currentPost.title);
+    let postDate = makeElement("p", undefined, ["date"], currentPost.date);
+    let postHr = makeElement("hr");
 
-    // Append the element
+    // Append the elements
     postView.appendChild(postHeader);
-
-    // Make the heading
-    let postHeading  = document.createElement("h1");
-    postHeading.id = "postHeading";
-    postHeading.innerHTML = currentPost.title;
-
-    // Append the heading
     postHeader.appendChild(postHeading);
-
-    // Make the post date
-    let postDate = document.createElement("p");
-    postDate.classList.add("date");
-    postDate.innerHTML = currentPost.date;
-
-    // Append the date to the header
     postHeader.appendChild(postDate);
-
-    // Add the horizontal rule
-    postHeader.appendChild(document.createElement("hr"));
+    postHeader.appendChild(postHr);
 
     // Do the markdown
     let parsedMd = parseMarkdown(currentPost.md);
@@ -172,39 +177,31 @@ function displayPostList() {
 
             // Make the preview
             // Outer div
-            let postPreview = document.createElement("div");
-            postPreview.classList.add("postPreview");
-
+            let postPreview = makeElement("div", undefined, ["postPreview"]);
             // Add a meta tag with the post id
             postPreview.postId = postId;
 
             // Heading
-            let heading = document.createElement("h2");
-            heading.classList.add("heading");
-            heading.innerText = currentPost.title;
+            let heading = makeElement("h2", undefined, ["heading"], currentPost.title);
             postPreview.appendChild(heading);
 
             // Date
-            let date = document.createElement("p");
-            date.classList.add("date");
-            date.innerText = currentPost.date;
+            let date = makeElement("p", undefined, ["date"], currentPost.date);
             postPreview.appendChild(date);
 
             // hr
-            let hr = document.createElement("hr");
+            let hr = makeElement("hr");
             postPreview.appendChild(hr);
 
             // Preview
-            let preview = document.createElement("div");
-            preview.classList.add("preview");
+            let preview = makeElement("div", undefined, ["preview"]);
 
             // Preview items (only 3)
             // Break apart the md file for parsing line by line
             let splitMdFile = currentPost.md.split("\n");
             for (i=0; i < 3; i++) {
                 // Line element
-                let previewLine = document.createElement("p");
-                previewLine.innerText = stripAll(splitMdFile[i]);
+                let previewLine = makeElement("p", undefined, undefined, stripAll(splitMdFile[i]));
 
                 // Append line to the parent div
                 preview.appendChild(previewLine);
