@@ -64,66 +64,42 @@ function parseMarkdown(md) {
 
     let isParagraph = false;
 
-    for (i=0; i<md.length; i++) {
+    for (i in md) {
         // Line by line work out elements
-        let line = md[i].split(" ");
-        let firstSection = line[0];
-
+        let line = md[i];
 
         // <hr/>
-        if ((firstSection == "---") || (firstSection == "___") || (firstSection == "***")) {
+        if (/^[-_*]{3}/g.test(line)) {
             isParagraph = false;
             finalElements.appendChild(document.createElement("hr"));
         }
 
         // Ends the paragraph totally
-        else if (firstSection == "" && isParagraph) {
+        else if (line == "" && isParagraph) {
             isParagraph = false;
         }
 
         // Headings
-        else if (firstSection[0] == "#") {
+        else if (/^#/g.test(line)) {
             isParagraph = false;
             // Determine the heading size
-            let headingSize = firstSection.split("").length;
-            switch (headingSize) {
-                case 1:
-                headingSize = "h1";
-                break;
-
-                case 2:
-                headingSize = "h2";
-                break;
-
-                case 3:
-                headingSize = "h3";
-                break;
-
-                case 4:
-                headingSize = "h4";
-                break;
-
-                case 5:
-                headingSize = "h5";
-                break;
-
-                default:
-                headingSize: "h6";
-                break;
+            let headingSize = line.split(" ")[0].length;
+            if (headingSize > 6) {
+                headingSize = 6;
             }
+            headingSize = "h" + headingSize;
 
             // Make the heading
             let heading = document.createElement(headingSize);
             // Get rid of the symbols at the start
-            line.shift();
-            heading.innerHTML = line.join(" ");
+            line = line.replace(/^#+\s/g, "");
+            heading.innerHTML = line;
             // Append it
             finalElements.appendChild(heading);
         }
 
         // Paragraphs
         else {
-            line = line.join(" ");
             if (isParagraph) {
                 let length = finalElements.children.length - 1;
                 finalElements.children[length].innerHTML += "<br/>" + line;
