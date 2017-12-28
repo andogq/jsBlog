@@ -25,25 +25,33 @@ function stripAll(string) {
     return string;
 }
 
-// Gets the md file for a particular post
-function getPost(post, postId, callback) {
+function getFile(url, callback) {
     // Prepare request
-    let request = new XMLHttpRequest();
+    let r = new XMLHttpRequest();
 
-    // Prepare callback
-    request.onreadystatechange = function() {
+    // Prepare callbacks
+    r.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            // Callback. Post Id is returned for reference
-            postList[postId].md = this.responseText;
-            callback(postId);
+            callback(this.responseText);
         }
     }
-    // Add unique number to prevent caching
-    let postLink = "posts/" + appendRandomId(post.link);
+
+    // Adds a random number to prevent caching
+    url = appendRandomId(url);
 
     // Send the request
-    request.open("GET", postLink, true);
-    request.send();
+    r.open("GET", url, true);
+    r.send();
+}
+
+// Gets the md file for a particular post
+function getPost(post, postId, callback) {
+    // Get the post md
+    getFile("posts/" + post.link, function(response) {
+        // Save the md and pass everything to the callback
+        postList[postId].md = response;
+        callback(postId);
+    });
 }
 
 // Turn markdown into html elements
@@ -242,24 +250,10 @@ function displayPostList() {
 
 // Sends request for the post list
 function loadPostList() {
-    let request = new XMLHttpRequest();
-
-    // Preparing callback
-    request.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            // Call back
-            postList = JSON.parse(this.responseText);
-
-            displayPostList();
-        }
-    }
-
-    // Add a random number to the end of the file to prevent caching
-    let filePath = appendRandomId("posts/postList.txt");
-
-    // Set up and send the request
-    request.open("GET", filePath, true);
-    request.send();
+    getFile("posts/postList.txt", function(response) {
+        postList = JSON.parse(response);
+        displayPostList();
+    });
 }
 
 // Close the post and go back to the post list
