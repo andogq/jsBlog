@@ -191,6 +191,7 @@ function displayFullPost(postId) {
 
     // Do the markdown
     let parsedMd = parseMarkdown(currentPost.md);
+    parsedMd.id = "postContent";
 
     postView.appendChild(parsedMd);
 }
