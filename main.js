@@ -3,6 +3,7 @@ let postList;
 
 // Elements
 let divContent = document.getElementById("content");
+let postView = document.getElementById("postView");
 
 // Adds a random id to the end of a URL, to prevent caching
 function appendRandomId(baseUrl) {
@@ -157,11 +158,11 @@ function displayFullPost(postId) {
     // Hide the post list
     divContent.style.display = "none";
 
+    // Show the surrounding container
+    postView.style.display = "block";
+
     // Get the current post details
     let currentPost = postList[postId];
-
-    // Get the surrounding container
-    let postView = document.getElementById("postView");
 
     // Make the header
     let postHeader = document.createElement("div");
@@ -280,6 +281,23 @@ function loadPostList() {
     // Set up and send the request
     request.open("GET", filePath, true);
     request.send();
+}
+
+// Close the post and go back to the post list
+function closePost() {
+    // Delete the children until one is left (the clsoe button)
+    while (postView.children.length != 1) {
+        let lastElement = postView.lastElementChild
+        postView.removeChild(lastElement);
+    }
+
+    // Hide the post view and go back to the list
+    postView.style.display = "none";
+    divContent.style.display = "block";
+}
+
+document.getElementById("closePost").onclick = function() {
+    closePost();
 }
 
 loadPostList();

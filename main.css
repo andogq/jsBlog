@@ -45,10 +45,18 @@ html, body {
 
 #postView {
     margin-top: 1%;
+    display: none;
 }
 
 #postContent {
     margin: 10px;
+}
+
+#closePost {
+    position: fixed;
+    right: 3%;
+    font-size: 2em;
+    cursor: pointer;
 }
 
 .postPreview {
@@ -56,6 +64,7 @@ html, body {
     border: 3px solid grey;
     border-radius: 5px;
     margin: 10px;
+    cursor: pointer;
 }
 
 .heading, #postHeading {
