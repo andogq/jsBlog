@@ -19,28 +19,22 @@ function stripAll(string) {
     // Split string and trim from start
     string = string.split(" ");
 
-    // Strings with multiple characters need to be done before the single characters
-    string[0] = string[0].replace("---", "");
-    string[0] = string[0].replace("***", "");
-    string[0] = string[0].replace("___", "");
+    // Characters which will only be removed from the first section of the line
+    let strippedCharactersFirstSection = ["---", "***", "___", "#", "-", "*", "_", "+"]
+    // Characters which will be removed from the whole line
+    let strippedCharactersFullString = ["`", "*", "_", "**", "__", "~~"]
 
-    // Single character section
-    string[0] = string[0].replace("#", "");
-    string[0] = string[0].replace("-", "");
-    string[0] = string[0].replace("*", "");
-    string[0] = string[0].replace("_", "");
-    string[0] = string[0].replace("+", "");
+    // Characters removed from the first section
+    for (j in strippedCharactersFirstSection) {
+        string[0] = string[0].replace(strippedCharactersFirstSection[j], "");
+    }
 
-    // Join string back together
     string = string.join(" ");
 
-    // Trim things from within string
-    string = string.replace("`", "");
-    string = string.replace("*", "");
-    string = string.replace("_", "");
-    string = string.replace("**", "");
-    string = string.replace("__", "");
-    string = string.replace("~~", "");
+    // Characters removed from the rest of the line
+    for (j in strippedCharactersFullString) {
+        string = string.replace(strippedCharactersFullString[j], "");
+    }
 
     // Return string
     return string;
