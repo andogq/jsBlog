@@ -16,31 +16,10 @@ function stripAll(string) {
     // Trim white space
     string = string.trim();
 
-    // Split string and trim from start
-    string = string.split(" ");
+    // Regexp which selects all the characters that need to be deleted
+    let regexpDelete = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
 
-    // Strings with multiple characters need to be done before the single characters
-    string[0] = string[0].replace("---", "");
-    string[0] = string[0].replace("***", "");
-    string[0] = string[0].replace("___", "");
-
-    // Single character section
-    string[0] = string[0].replace("#", "");
-    string[0] = string[0].replace("-", "");
-    string[0] = string[0].replace("*", "");
-    string[0] = string[0].replace("_", "");
-    string[0] = string[0].replace("+", "");
-
-    // Join string back together
-    string = string.join(" ");
-
-    // Trim things from within string
-    string = string.replace("`", "");
-    string = string.replace("*", "");
-    string = string.replace("_", "");
-    string = string.replace("**", "");
-    string = string.replace("__", "");
-    string = string.replace("~~", "");
+    string = string.replace(regexpDelete, "$1$2");
 
     // Return string
     return string;
