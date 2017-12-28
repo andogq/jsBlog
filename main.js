@@ -137,10 +137,8 @@ function parseMarkdown(md) {
 
 // Opens a window with the full post
 function displayFullPost(postId) {
-    // Hide the post list
+    // Hide the post list and show the post container
     divContent.style.display = "none";
-
-    // Show the surrounding container
     postView.style.display = "block";
 
     // Get the current post details
@@ -168,13 +166,11 @@ function displayFullPost(postId) {
 // Displays all the posts from the post list with a preview
 function displayPostList() {
     // For each post
-    for (postId=0; postId < postList.length; postId++) {
+    for (postId in postList) {
         let currentPost = postList[postId];
 
         // Get the md for the post
         getPost(currentPost, postId, function(postId) {
-            let thisPost = postList[postId];
-
             // Make the preview
             // Outer div
             let postPreview = makeElement("div", undefined, ["postPreview"]);
@@ -231,7 +227,7 @@ function loadPostList() {
 
 // Close the post and go back to the post list
 function closePost() {
-    // Delete the children until one is left (the clsoe button)
+    // Delete the children until one is left (the close button)
     while (postView.children.length != 1) {
         let lastElement = postView.lastElementChild
         postView.removeChild(lastElement);
