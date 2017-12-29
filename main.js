@@ -89,6 +89,8 @@ function parseMarkdown(md) {
     let listType = "none";
     // For code blocks
     let isCodeBlock = false;
+    let isIndentedCodeBlock = false;
+    let firstCodeLine = false;
 
     for (i in md) {
         // Line by line work out elements
@@ -99,18 +101,19 @@ function parseMarkdown(md) {
             isParagraph = false;
             listType = "none";
             isCodeBlock = false;
+            isIndentedCodeBlock = false;
             finalElements.appendChild(makeElement("hr"));
         }
 
-        // Code blocks
-        else if (/^ {4}/g.test(line)) {
+        // Code blocks with spaces
+        else if (/^ {4}/g.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
             // Replace the spaces at the start of the line with a new line
             line = line.replace(/^ {4}/g, "\n");
 
             // If it's not already in a code block, make a new one
-            if (!isCodeBlock) {
+            if (!isIndentedCodeBlock) {
                 // Make a new code block and append it
                 let newCodeBlock = makeElement("pre", undefined, ["prettyprint", "linenums"]);
                 finalElements.appendChild(newCodeBlock);
@@ -118,17 +121,46 @@ function parseMarkdown(md) {
                 // Removes the extra new line at the start
                 line = line.replace("\n", "");
 
-                isCodeBlock = true;
+                isIndentedCodeBlock = true;
             }
 
             // Add the line to the code block
             finalElements.lastChild.innerHTML += line;
         }
 
+        // Code blocks with backticks (and optional language)
+        else if (/^`{3}/g.test(line)) {
+                isParagraph = false;
+                listType = "none";
+                isIndentedCodeBlock = false;
+
+                // Opening code block
+                if (!isCodeBlock) {
+                    // Check if a language is supplied
+                    let language;
+                    if (/^`{3} ?[\w\d]+/g.test(line)) {
+                        // Extract the language
+                        language = /^`{3} ?([\w\d]+)/g.exec(line)[1];
+                    }
+
+                    // Make the element
+                    let newCodeBlock = makeElement("pre", undefined, ["prettyprint", "linenums", "lang-" + language]);
+                    finalElements.appendChild(newCodeBlock);
+
+                    firstCodeLine = true;
+                    isCodeBlock = true;
+                }
+                // Closing code block
+                else {
+                    isCodeBlock = false;
+                }
+        }
+
         // ul
         else if (/^[*\-+]{1} /g.test(line)) {
             isParagraph = false;
             isCodeBlock = false;
+            isIndentedCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(/^[*\-+]{1} /g, "");
 
@@ -150,6 +182,7 @@ function parseMarkdown(md) {
         else if (/^\d+\. /g.test(line)) {
             isParagraph = false;
             isCodeBlock = false;
+            isIndentedCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(/^\d+\. /g, "");
 
@@ -176,6 +209,7 @@ function parseMarkdown(md) {
         else if (/^#/g.test(line)) {
             isParagraph = false;
             isCodeBlock = false;
+            isIndentedCodeBlock = false;
             listType = "none";
             // Determine the heading size
             let headingSize = line.split(" ")[0].length;
@@ -191,18 +225,28 @@ function parseMarkdown(md) {
             finalElements.appendChild(heading);
         }
 
-        // Paragraphs. Make sure that it isn't a random new line
+        // Paragraph or code block. Make sure that it isn't a random new line
         else if (line != "") {
-            listType = "none";
-            isCodeBlock = false;
-            if (isParagraph) {
-                // Continuing on from another paragraph. Only add a line break
-                finalElements.lastChild.innerHTML += "<br/>" + line;
-            } else {
-                // New paragraph totally
-                isParagraph = true;
-                let paragraph = makeElement("p", undefined, undefined, line);
-                finalElements.appendChild(paragraph);
+            // Code block
+            if (isCodeBlock || isIndentedCodeBlock) {
+                // Add a new line if it's not the first line
+                line = !firstCodeLine ? "\n" + line : line;
+                firstCodeLine = false;
+                // Append the line to the code element
+                finalElements.lastChild.innerHTML += line;
+            }
+            // Paragraph
+            else {
+                listType = "none";
+                if (isParagraph) {
+                    // Continuing on from another paragraph. Only add a line break
+                    finalElements.lastChild.innerHTML += "<br/>" + line;
+                } else {
+                    // New paragraph totally
+                    isParagraph = true;
+                    let paragraph = makeElement("p", undefined, undefined, line);
+                    finalElements.appendChild(paragraph);
+                }
             }
         }
     }
