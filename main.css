@@ -1,6 +1,5 @@
 * {
     margin: 0;
-    padding: 0;
 }
 
 html, body {
@@ -11,7 +10,7 @@ html, body {
 #header {
     height: 10%;
     width: 100%;
-    background: #FF9B61;
+    background: #FF6B15;
     color: white;
     font-family: sans-serif;
     position: relative;
@@ -39,9 +38,6 @@ html, body {
     padding-left: 10%;
 }
 
-#postHeading {
-    font-size: 3em;
-}
 
 #postView {
     margin-top: 1%;
@@ -55,8 +51,14 @@ html, body {
 #closePost {
     position: fixed;
     right: 3%;
+    top: 15%;
     font-size: 2em;
     cursor: pointer;
+    font-family: monospace;
+    padding: 0 5px 1px;
+    background: #FF6B15;
+    border-radius: 3px;
+    color: white;
 }
 
 .postPreview {
@@ -72,9 +74,14 @@ html, body {
     font-family: sans-serif;
 }
 
+.heading {
+    font-size: 1.5em;
+}
+
 .date {
     float: right;
     margin-top: 5px;
+    font-size: 1em;
 }
 
 .postPreview > hr {
@@ -87,10 +94,51 @@ html, body {
     margin: 5px 0;
 }
 
-#postHeading {
-    width: 80%;
+.heading, .date, #postHeading, #postDate {
+    display: inline-block;
 }
 
-.heading, .date, #postHeading {
-    display: inline-block;
+#postHeading, #postDate {
+    font-family: sans-serif;
+    color: #FF6B15;
+}
+
+#postHeading {
+    font-size: 3em;
+}
+
+#postHeader hr {
+    border: 2px solid #00B2B2;
+    border-radius: 3px;
+}
+
+#postDate {
+    font-size: 1.5em;
+    margin-top: 20px;
+    float: right;
+}
+
+#postContent > * {
+    margin: 15px 0;
+}
+
+#postContent h1, #postContent h2, #postContent h3, #postContent h4, #postContent h5, #postContent h6 {
+    font-family: sans-serif;
+}
+
+#postContent h1 {
+    color: #FF7B2E;
+}
+
+#postContent h2 {
+    color: #B24607;
+}
+
+#postContent > ol > li, #postContent > ul > li {
+    padding: 5px 0;
+}
+
+#postContent hr {
+    border: 2px solid #00B2B2;
+    margin: 20px 0;
 }

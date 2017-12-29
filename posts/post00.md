@@ -10,6 +10,11 @@ look `console.log("Hello")`. *Cool* right?
 ![A random image](img/random.jpeg)
 - Pretty cool huh?
 ---
+## Some paragraphs
+Here are a heap of paragraphs. This one has a really really really really long line that will go on for ever, pretty much I am just typing stuff to make sure it's obvious.
+They are kinda long
+
+This is a totally different subject
 ## Sub title
 That'll ***do***
 here's a [link](you're welcome)
