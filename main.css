@@ -11,32 +11,32 @@ html, body {
 #header {
     height: 10%;
     width: 100%;
-    background: grey;
+    background: #FF9B61;
+    color: white;
+    font-family: sans-serif;
+    position: relative;
+}
+
+#title, #subtitle {
+    margin: 3px;
+    position: absolute;
+    bottom: 0;
+}
+
+#title {
+    font-size: 2.5em;
+    left: 0;
+}
+
+#subtitle {
+    font-size: 1.3em;
+    right: 0;
+
 }
 
 #content, #postView {
     width: 80%;
     padding-left: 10%;
-}
-
-#header > * {
-    display: inline-block;
-}
-
-#title {
-    font-size: 2.7em;
-    width: 50%;
-    vertical-align: middle;
-}
-
-#menu {
-    font-size: 1.5em;
-    width: 49%;
-    height: 50%;
-    margin-top: 2.5%;
-    margin-right: 1%;
-    text-align: right;
-    float: right;
 }
 
 #postHeading {
@@ -60,22 +60,35 @@ html, body {
 }
 
 .postPreview {
-    padding: 10px;
-    border: 3px solid grey;
+    padding: 15px;
+    background: #00B2B2;
     border-radius: 5px;
     margin: 10px;
     cursor: pointer;
 }
 
-.heading, #postHeading {
-    width: 80%;
+.heading, .date, .preview {
+    color: white;
+    font-family: sans-serif;
 }
 
 .date {
-    width: 19%;
-    text-align: right;
-    padding-right: 1%;
     float: right;
+    margin-top: 5px;
+}
+
+.postPreview > hr {
+    border: 2px solid white;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+.preview > p {
+    margin: 5px 0;
+}
+
+#postHeading {
+    width: 80%;
 }
 
 .heading, .date, #postHeading {
