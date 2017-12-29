@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const prettify = require("./prettify/prettify")
 
 let title = "";
 let date = "";
