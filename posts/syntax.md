@@ -70,13 +70,19 @@ ___Bold italic text___
     console.log("This is code!");
 ```
 (Four spaces before each line)
-```
+```js
 console.log("There's more code!");
 ```
-    ```
+    ```js
     console.log("There's more code!");
     ```
-(Back ticks are found usually above the tab key, with `~`)
+(Back ticks are found usually above the tab key, with `~`. `js` can be replaced with any language for syntax coloring. If ommited the language will automatically be detected.)
+``` nocode
+nocode can also be used as a language option, to remove any syntax highlighting and line numbers
+```
+    ``` nocode
+    nocode can also be used as a language option, to remove any syntax highlighting and line numbers
+    ```
 
 Inline `code`
     Inline `code`
@@ -88,4 +94,4 @@ Inline `code`
 # Images
 ![Alternate text](http://lorempixel.com/800/500/city/)
     ![Alternate text](http://lorempixel.com/800/500/city/)
-(Local images can also be used too)
+(May take a moment to load due to slow host. Local images can also be used too.)
