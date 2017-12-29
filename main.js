@@ -75,6 +75,16 @@ function makeElement(type, id, classList, innerHTML) {
     return element;
 }
 
+// Adds a wrapper around any inline code
+function checkForInlineCode(line) {
+    // Check if there is any inline code
+    let regex = /`(.+?)`/g;
+    while (inlineCode = regex.exec(line)) {
+        line = line.replace(regex, "<code class=\"prettyprint\">$1</code>");
+    }
+    return line;
+}
+
 // Turn markdown into html elements
 function parseMarkdown(md) {
     // Final elements
@@ -174,6 +184,7 @@ function parseMarkdown(md) {
             }
 
             // Append a new element to it.
+            line = checkForInlineCode(line);
             let newLi = makeElement("li", undefined, undefined, line)
             finalElements.lastChild.appendChild(newLi);
         }
@@ -196,6 +207,7 @@ function parseMarkdown(md) {
             }
 
             // Append a new element to it.
+            line = checkForInlineCode(line);
             let newLi = makeElement("li", undefined, undefined, line)
             finalElements.lastChild.appendChild(newLi);
         }
@@ -239,6 +251,9 @@ function parseMarkdown(md) {
                 listType = "none";
                 isCodeBlock = false;
                 isIndentedCodeBlock = false;
+
+                line = checkForInlineCode(line);
+
                 if (isParagraph) {
                     // Continuing on from another paragraph. Only add a line break
                     finalElements.lastChild.innerHTML += "<br/>" + line;
