@@ -17,7 +17,8 @@
 
 ![alt text](link) <img alt="alt text" href="link"/>
 
-`code` <code>code</code>
+`code` <code class="prettyprint linenums">code</code>
+[Space]x4 <pre class="prettyprint linenums">code</pre>
 
 --- or ___ or *** <hr/>
 
