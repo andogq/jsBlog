@@ -12,7 +12,7 @@ let linkRegex = /\[(.+?)\]\((.+?)\)/g;
 let boldRegex = /[*_]{2}(.+?)[*_]{2}/g;
 let italicRegex = /[*_](.+?)[*_]/g;
 let boldItalicRegex = /[*_]{3}(.+?)[*_]{3}/g;
-let hrRegex = /^[-_*]{3}/g;
+let hrRegex = /^[-_*]{3,}$/g;
 let imageRegex = /^!\[(.+?)\]\((.+?)\)/g;
 let indentedCodeRegex = /^ {4}/g;
 let backTickCodeRegex = /^`{3}/g;
@@ -170,6 +170,22 @@ function parseMarkdown(md) {
         // Line by line work out elements
         let line = md[i];
 
+        // Reset the regexs each time
+        stripAllRegex.lastIndex = 0;
+        inlineCodeRegex.lastIndex = 0;
+        linkRegex.lastIndex = 0;
+        boldRegex.lastIndex = 0;
+        italicRegex.lastIndex = 0;
+        boldItalicRegex.lastIndex = 0;
+        hrRegex.lastIndex = 0;
+        imageRegex.lastIndex = 0;
+        indentedCodeRegex.lastIndex = 0;
+        backTickCodeRegex.lastIndex = 0;
+        backTickCodeLanguageRegex.lastIndex = 0;
+        ulRegex.lastIndex = 0;
+        olRegex.lastIndex = 0;
+        headingRegex.lastIndex = 0;
+
         // <hr/>
         if (hrRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
@@ -235,8 +251,16 @@ function parseMarkdown(md) {
                         language = backTickCodeLanguageRegex.exec(line)[1];
                     }
 
+                    let classList;
+                    if (language == "nocode") {
+                        classList = ["prettyprint", "linenums", "nocode"];
+                    } else if (language) {
+                        classList = ["prettyprint", "linenums", "lang-" + language];
+                    } else {
+                        classList = ["prettyPrint", "linenums"];
+                    }
                     // Make the element
-                    let newCodeBlock = makeElement("pre", undefined, ["prettyprint", "linenums", "lang-" + language]);
+                    let newCodeBlock = makeElement("pre", undefined, classList);
                     finalElements.appendChild(newCodeBlock);
 
                     firstCodeLine = true;
