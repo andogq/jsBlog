@@ -1,20 +1,20 @@
 # Test post
 ---
-This is a test post
-Lots of interesting stuff
-here is some `code that is` pretty cool
+This __is__ a __test__ post
+_Lots_ of _interesting_ stuff
+here is some `code that is` pretty **cool**
 here are `two` more `bits`
-look `console.log("Hello")`. Cool right?
+look `console.log("Hello")`. *Cool* right?
 ---
 ## Here's a cool image that I like
 ![A random image](img/random.jpeg)
 - Pretty cool huh?
 ---
 ## Sub title
-That'll do
+That'll ***do***
 here's a [link](you're welcome)
 have [another](aren't i generous) [two](no problemo)
-- Or not
+- Or ___not___
 - You `console.log("thought")`
 1. ok `// i'll stop`
 

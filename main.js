@@ -9,6 +9,9 @@ let postView = document.getElementById("postView");
 let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
 let inlineCodeRegex = /`(.+?)`/g;
 let linkRegex = /\[(.+?)\]\((.+?)\)/g;
+let boldRegex = /[*_]{2}(.+?)[*_]{2}/g;
+let italicRegex = /[*_](.+?)[*_]/g;
+let boldItalicRegex = /[*_]{3}(.+?)[*_]{3}/g;
 let hrRegex = /^[-_*]{3}/g;
 let imageRegex = /^!\[(.+?)\]\((.+?)\)/g;
 let indentedCodeRegex = /^ {4}/g;
@@ -102,10 +105,37 @@ function checkForLinks(line) {
     return line;
 }
 
+// Checks for bold text
+function checkForBold(line) {
+    while (boldRegex.exec(line)) {
+        line = line.replace(boldRegex, "<b>$1</b>");
+    }
+    return line;
+}
+
+// Checks for italic text
+function checkForItalic(line) {
+    while (italicRegex.exec(line)) {
+        line = line.replace(italicRegex, "<i>$1</i>");
+    }
+    return line;
+}
+
+// Checks for bold and italic text
+function checkForBoldItalic(line) {
+    while (boldItalicRegex.exec(line)) {
+        line = line.replace(boldItalicRegex, "<i><b>$1</b></i>");
+    }
+    return line;
+}
+
 // Checks for inline things
 function checkForInline(line) {
     line = checkForLinks(line);
     line = checkForInlineCode(line);
+    line = checkForBold(line);
+    line = checkForItalic(line);
+    line = checkForBoldItalic(line);
     return line;
 }
 
