@@ -10,14 +10,11 @@ html, body {
 #header {
     height: 10%;
     width: 100%;
-    background: #FF6B15;
-    color: white;
-    font-family: sans-serif;
     position: relative;
 }
 
 #title, #subtitle {
-    margin: 3px;
+    margin: 10px;
     position: absolute;
     bottom: 0;
 }
@@ -56,22 +53,18 @@ html, body {
     cursor: pointer;
     font-family: monospace;
     padding: 0 5px 1px;
-    background: #FF6B15;
+    background: black;
     border-radius: 3px;
     color: white;
 }
 
 .postPreview {
     padding: 15px;
-    background: #00B2B2;
+    background: white;
+    color: black;
     border-radius: 5px;
     margin: 10px;
     cursor: pointer;
-}
-
-.heading, .date, .preview {
-    color: white;
-    font-family: sans-serif;
 }
 
 .heading {
@@ -99,8 +92,7 @@ html, body {
 }
 
 #postHeading, #postDate {
-    font-family: sans-serif;
-    color: #FF6B15;
+    color: black;
 }
 
 #postHeading {
@@ -108,7 +100,7 @@ html, body {
 }
 
 #postHeader hr {
-    border: 2px solid #00B2B2;
+    border: 2px solid black;
     border-radius: 3px;
 }
 
@@ -122,23 +114,12 @@ html, body {
     margin: 15px 0;
 }
 
-#postContent h1, #postContent h2, #postContent h3, #postContent h4, #postContent h5, #postContent h6 {
-    font-family: sans-serif;
-}
-
-#postContent h1 {
-    color: #FF7B2E;
-}
-
-#postContent h2 {
-    color: #B24607;
-}
-
 #postContent > ol > li, #postContent > ul > li {
     padding: 5px 0;
 }
 
 #postContent hr {
-    border: 2px solid #00B2B2;
+    border: 2px solid black;
+    border-radius: 3px;
     margin: 20px 0;
 }
