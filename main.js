@@ -102,6 +102,23 @@ function checkForLinks(line) {
     return line;
 }
 
+// Checks for inline things
+function checkForInline(line) {
+    line = checkForLinks(line);
+    line = checkForInlineCode(line);
+    return line;
+}
+
+
+// Makes a li element
+function makeLi(line, replaceRegex) {
+    // Delete the symbol at the start
+    line = line.replace(replaceRegex, "");
+    line = checkForInline(line);
+    let newLi = makeElement("li", undefined, undefined, line)
+    return newLi;
+}
+
 // Turn markdown into html elements
 function parseMarkdown(md) {
     // Final elements
@@ -127,7 +144,6 @@ function parseMarkdown(md) {
         if (hrRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
-            isCodeBlock = false;
             isIndentedCodeBlock = false;
             finalElements.appendChild(makeElement("hr"));
         }
@@ -136,7 +152,6 @@ function parseMarkdown(md) {
         else if (imageRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
-            isCodeBlock = false;
             isIndentedCodeBlock = false;
 
             // This line must be used after .test() if the regex will be used again
@@ -206,7 +221,6 @@ function parseMarkdown(md) {
         // ul
         else if (ulRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
-            isCodeBlock = false;
             isIndentedCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(ulRegex, "");
@@ -220,17 +234,13 @@ function parseMarkdown(md) {
                 listType = "ul";
             }
 
-            // Append a new element to it.
-            line = checkForInlineCode(line);
-            line = checkForLinks(line);
-            let newLi = makeElement("li", undefined, undefined, line)
-            finalElements.lastChild.appendChild(newLi);
+            // Make and append a li
+            finalElements.lastChild.appendChild(makeLi(line));
         }
 
         // ol
         else if (olRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
-            isCodeBlock = false;
             isIndentedCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(olRegex, "");
@@ -244,11 +254,8 @@ function parseMarkdown(md) {
                 listType = "ol";
             }
 
-            // Append a new element to it.
-            line = checkForInlineCode(line);
-            line = checkForLinks(line);
-            let newLi = makeElement("li", undefined, undefined, line)
-            finalElements.lastChild.appendChild(newLi);
+            // Make and append a li
+            finalElements.lastChild.appendChild(makeLi(line));
         }
 
         // Ends the paragraph totally
@@ -291,8 +298,7 @@ function parseMarkdown(md) {
                 isCodeBlock = false;
                 isIndentedCodeBlock = false;
 
-                line = checkForInlineCode(line);
-                line = checkForLinks(line);
+                line = checkForInline(line);
 
                 if (isParagraph) {
                     // Continuing on from another paragraph. Only add a line break
@@ -306,7 +312,6 @@ function parseMarkdown(md) {
             }
         }
     }
-
     return finalElements;
 }
 
