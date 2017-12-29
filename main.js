@@ -97,7 +97,7 @@ function parseMarkdown(md) {
         let line = md[i];
 
         // <hr/>
-        if (/^[-_*]{3}/g.test(line)) {
+        if (/^[-_*]{3}/g.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
             isCodeBlock = false;
@@ -157,7 +157,7 @@ function parseMarkdown(md) {
         }
 
         // ul
-        else if (/^[*\-+]{1} /g.test(line)) {
+        else if (/^[*\-+]{1} /g.test(line) && !isCodeBlock) {
             isParagraph = false;
             isCodeBlock = false;
             isIndentedCodeBlock = false;
@@ -179,7 +179,7 @@ function parseMarkdown(md) {
         }
 
         // ul
-        else if (/^\d+\. /g.test(line)) {
+        else if (/^\d+\. /g.test(line) && !isCodeBlock) {
             isParagraph = false;
             isCodeBlock = false;
             isIndentedCodeBlock = false;
@@ -201,14 +201,13 @@ function parseMarkdown(md) {
         }
 
         // Ends the paragraph totally
-        else if (line == "" && isParagraph) {
+        else if (line == "" && isParagraph && !isCodeBlock) {
             isParagraph = false;
         }
 
         // Headings
-        else if (/^#/g.test(line)) {
+        else if (/^#/g.test(line) && !isCodeBlock) {
             isParagraph = false;
-            isCodeBlock = false;
             isIndentedCodeBlock = false;
             listType = "none";
             // Determine the heading size
@@ -228,7 +227,7 @@ function parseMarkdown(md) {
         // Paragraph or code block. Make sure that it isn't a random new line
         else if (line != "") {
             // Code block
-            if (isCodeBlock || isIndentedCodeBlock) {
+            if (isCodeBlock) {
                 // Add a new line if it's not the first line
                 line = !firstCodeLine ? "\n" + line : line;
                 firstCodeLine = false;
@@ -238,6 +237,8 @@ function parseMarkdown(md) {
             // Paragraph
             else {
                 listType = "none";
+                isCodeBlock = false;
+                isIndentedCodeBlock = false;
                 if (isParagraph) {
                     // Continuing on from another paragraph. Only add a line break
                     finalElements.lastChild.innerHTML += "<br/>" + line;
