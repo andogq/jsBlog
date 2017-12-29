@@ -119,6 +119,26 @@ function parseMarkdown(md) {
             finalElements.lastChild.appendChild(newLi);
         }
 
+        // ul
+        else if (/^\d+\. /g.test(line)) {
+            isParagraph = false;
+            // Delete the symbol at the start
+            line = line.replace(/^\d+\. /g, "");
+
+            // If not already an ol
+            if (listType != "ol") {
+                // Make a new ol
+                let newOl = makeElement("ol");
+                finalElements.appendChild(newOl);
+
+                listType = "ol";
+            }
+
+            // Append a new element to it.
+            let newLi = makeElement("li", undefined, undefined, line)
+            finalElements.lastChild.appendChild(newLi);
+        }
+
         // Ends the paragraph totally
         else if (line == "" && isParagraph) {
             isParagraph = false;
