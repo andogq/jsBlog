@@ -10,6 +10,11 @@
         "link": "howto.md"
     },
     {
+        "title": "How to customise jsBlog",
+        "date": "29/12/17",
+        "link": "config.md"
+    },
+    {
         "title": "jsBlog syntax",
         "date": "29/12/17",
         "link": "syntax.md"

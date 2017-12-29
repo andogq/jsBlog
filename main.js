@@ -1,7 +1,11 @@
 // Global varibale
 let postList;
+let configFile;
 
 // Elements
+let blogTitle = document.getElementById("title");
+let blogSubtitle = document.getElementById("subtitle");
+let blogHeader = document.getElementById("header");
 let divContent = document.getElementById("content");
 let postView = document.getElementById("postView");
 
@@ -492,8 +496,59 @@ function closePost() {
     divContent.style.display = "block";
 }
 
+// Loads and enforces the config file
+function loadConfig() {
+    getFile("config.json", function(response) {
+        configFile = JSON.parse(response);
+
+        // Change the title and subtitle
+        blogTitle.innerHTML = configFile.title;
+        blogSubtitle.innerHTML = configFile.subtitle;
+
+        // Make a style sheet for all the colors and fonts
+        let stylesheet = makeElement("style");
+
+        // Colors and fonts for header
+        let headerColors = configFile.colors.header;
+        stylesheet.innerHTML += "#header{background:" + headerColors.background + ";color:" + headerColors.text + ";font-family:" + configFile.fonts.header + "}";
+
+        // Colors and fonts for post previews
+        let postPreviewColors = configFile.colors.postPreview;
+        stylesheet.innerHTML += ".postPreview{background:" + postPreviewColors.background + ";color:" + postPreviewColors.text + ";font-family:" + configFile.fonts.postPreview + "}";
+
+        // Colors and fonts for the full post
+        let postColors = configFile.colors.post;
+        let postFonts = configFile.fonts.post;
+        // Close button
+        stylesheet.innerHTML += "#closePost{background:" + postColors.closeButton + "}";
+        // Post heading
+        stylesheet.innerHTML += "#postHeader>*{color:" + postColors.heading + ";font-family:" + postFonts.heading + "}";
+        // hr
+        stylesheet.innerHTML += "#postView hr{border-color:" + postColors.hr + "}";
+        // h1
+        stylesheet.innerHTML += "#postView h1{color:" + postColors.h1 + ";font-family:" + postFonts.h1 + "}";
+        // h2
+        stylesheet.innerHTML += "#postContent h2{color:" + postColors.h2 + ";font-family:" + postFonts.h2 + "}";
+        // h3
+        stylesheet.innerHTML += "#postContent h3{color:" + postColors.h3 + ";font-family:" + postFonts.h3 + "}";
+        // h4
+        stylesheet.innerHTML += "#postContent h4{color:" + postColors.h4 + ";font-family:" + postFonts.h4 + "}";
+        // h5
+        stylesheet.innerHTML += "#postContent h5{color:" + postColors.h5 + ";font-family:" + postFonts.h5 + "}";
+        // h6
+        stylesheet.innerHTML += "#postContent h6{color:" + postColors.h6 + ";font-family:" + postFonts.h6 + "}";
+        // p
+        stylesheet.innerHTML += "#postContent p{color:" + postColors.p + ";font-family:" + postFonts.ppostContent + "}";
+
+
+        // Add the stylesheet
+        document.head.appendChild(stylesheet);
+    });
+}
+
 document.getElementById("closePost").onclick = function() {
     closePost();
 }
 
+loadConfig();
 loadPostList();
