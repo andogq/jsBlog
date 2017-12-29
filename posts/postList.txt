@@ -1,12 +1,7 @@
 [
     {
-        "title": "Test Post",
-        "date": "21/12/17",
-        "link": "post00.md"
-    },
-    {
-        "title": "Another Post",
-        "date": "22/12/17",
-        "link": "post01.md"
+        "title": "Introduction to jsBlog",
+        "date": "29/12/17",
+        "link": "introduction.md"
     }
 ]
