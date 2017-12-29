@@ -3,5 +3,10 @@
         "title": "Introduction to jsBlog",
         "date": "29/12/17",
         "link": "introduction.md"
+    },
+    {
+        "title": "How to use jsBlog",
+        "date": "29/12/17",
+        "link": "howto.md"
     }
 ]
