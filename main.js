@@ -5,6 +5,19 @@ let postList;
 let divContent = document.getElementById("content");
 let postView = document.getElementById("postView");
 
+// Regular expressions
+let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
+let inlineCodeRegex = /`(.+?)`/g;
+let linkRegex = /\[(.+?)\]\((.+?)\)/g;
+let hrRegex = /^[-_*]{3}/g;
+let imageRegex = /^!\[(.+?)\]\((.+?)\)/g;
+let indentedCodeRegex = /^ {4}/g;
+let backTickCodeRegex = /^`{3}/g;
+let backTickCodeLanguageRegex = /^`{3} ?[\w\d]+/g;
+let ulRegex = /^[*\-+]{1} /g
+let olRegex = /^\d+\. /g;
+let headingRegex = /^#+\s/g;
+
 // Adds a random id to the end of a URL, to prevent caching
 function appendRandomId(baseUrl) {
     let randomId = Math.random().toString().split(".")[1];
@@ -16,10 +29,7 @@ function stripAll(string) {
     // Trim white space
     string = string.trim();
 
-    // Regexp which selects all the characters that need to be deleted
-    let regexpDelete = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
-
-    string = string.replace(regexpDelete, "$1$2");
+    string = string.replace(stripAllRegex, "$1$2");
 
     // Return string
     return string;
@@ -78,18 +88,16 @@ function makeElement(type, id, classList, innerHTML) {
 // Adds a wrapper around any inline code
 function checkForInlineCode(line) {
     // Check if there is any inline code
-    let regex = /`(.+?)`/g;
-    while (inlineCode = regex.exec(line)) {
-        line = line.replace(regex, "<code class=\"prettyprint\">$1</code>");
+    while (inlineCode = inlineCodeRegex.exec(line)) {
+        line = line.replace(inlineCodeRegex, "<code class=\"prettyprint\">$1</code>");
     }
     return line;
 }
 
 // Checks for any links in the line
 function checkForLinks(line) {
-    let regex = /\[(.+?)\]\((.+?)\)/g;
-    while (link = regex.exec(line)) {
-        line = line.replace(regex, "<a href=\"$2\">$1</a>");
+    while (link = linkRegex.exec(line)) {
+        line = line.replace(linkRegex, "<a href=\"$2\">$1</a>");
     }
     return line;
 }
@@ -116,7 +124,7 @@ function parseMarkdown(md) {
         let line = md[i];
 
         // <hr/>
-        if (/^[-_*]{3}/g.test(line) && !isCodeBlock) {
+        if (hrRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
             isCodeBlock = false;
@@ -125,13 +133,15 @@ function parseMarkdown(md) {
         }
 
         // Images
-        else if (/^!\[(.+?)\]\((.+?)\)/g.test(line) && !isCodeBlock) {
+        else if (imageRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
             isCodeBlock = false;
             isIndentedCodeBlock = false;
 
-            let imageData = /^!\[(.+?)\]\((.+?)\)/g.exec(line);
+            // This line must be used after .test() if the regex will be used again
+            imageRegex.lastIndex = 0;
+            let imageData = imageRegex.exec(line);
 
             let newImage = makeElement("img");
             newImage.alt = imageData[1];
@@ -142,11 +152,11 @@ function parseMarkdown(md) {
         }
 
         // Code blocks with spaces
-        else if (/^ {4}/g.test(line) && !isCodeBlock) {
+        else if (indentedCodeRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             listType = "none";
             // Replace the spaces at the start of the line with a new line
-            line = line.replace(/^ {4}/g, "\n");
+            line = line.replace(indentedCodeRegex, "\n");
 
             // If it's not already in a code block, make a new one
             if (!isIndentedCodeBlock) {
@@ -165,7 +175,7 @@ function parseMarkdown(md) {
         }
 
         // Code blocks with backticks (and optional language)
-        else if (/^`{3}/g.test(line)) {
+        else if (backTickCodeRegex.test(line)) {
                 isParagraph = false;
                 listType = "none";
                 isIndentedCodeBlock = false;
@@ -174,9 +184,10 @@ function parseMarkdown(md) {
                 if (!isCodeBlock) {
                     // Check if a language is supplied
                     let language;
-                    if (/^`{3} ?[\w\d]+/g.test(line)) {
+                    if (backTickCodeLanguageRegex.test(line)) {
                         // Extract the language
-                        language = /^`{3} ?([\w\d]+)/g.exec(line)[1];
+                        backTickCodeLanguageRegex.lastIndex = 0;
+                        language = backTickCodeLanguageRegex.exec(line)[1];
                     }
 
                     // Make the element
@@ -193,12 +204,12 @@ function parseMarkdown(md) {
         }
 
         // ul
-        else if (/^[*\-+]{1} /g.test(line) && !isCodeBlock) {
+        else if (ulRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             isCodeBlock = false;
             isIndentedCodeBlock = false;
             // Delete the symbol at the start
-            line = line.replace(/^[*\-+]{1} /g, "");
+            line = line.replace(ulRegex, "");
 
             // If not already an ul
             if (listType != "ul") {
@@ -216,13 +227,13 @@ function parseMarkdown(md) {
             finalElements.lastChild.appendChild(newLi);
         }
 
-        // ul
-        else if (/^\d+\. /g.test(line) && !isCodeBlock) {
+        // ol
+        else if (olRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             isCodeBlock = false;
             isIndentedCodeBlock = false;
             // Delete the symbol at the start
-            line = line.replace(/^\d+\. /g, "");
+            line = line.replace(olRegex, "");
 
             // If not already an ol
             if (listType != "ol") {
@@ -246,7 +257,7 @@ function parseMarkdown(md) {
         }
 
         // Headings
-        else if (/^#/g.test(line) && !isCodeBlock) {
+        else if (headingRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             isIndentedCodeBlock = false;
             listType = "none";
@@ -255,7 +266,7 @@ function parseMarkdown(md) {
             headingSize > 6 ? headingSize = "h6": headingSize = "h" + headingSize;
 
             // Get rid of the symbols at the start
-            line = line.replace(/^#+\s/g, "");
+            line = line.replace(headingRegex, "");
 
             // Make the heading
             let heading = makeElement(headingSize, undefined, undefined, line);
