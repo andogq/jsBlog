@@ -229,14 +229,23 @@ function parseMarkdown(md) {
                 if (!isCodeBlock) {
                     // Check if a language is supplied
                     let language;
+                    backTickCodeLanguageRegex.lastIndex = 0;
                     if (backTickCodeLanguageRegex.test(line)) {
                         // Extract the language
                         backTickCodeLanguageRegex.lastIndex = 0;
                         language = backTickCodeLanguageRegex.exec(line)[1];
                     }
 
+                    let classList;
+                    if (language == "nocode") {
+                        classList = ["prettyprint", "linenums", "nocode"];
+                    } else if (language) {
+                        classList = ["prettyprint", "linenums", "lang-" + language];
+                    } else {
+                        classList = ["prettyPrint", "linenums"];
+                    }
                     // Make the element
-                    let newCodeBlock = makeElement("pre", undefined, ["prettyprint", "linenums", "lang-" + language]);
+                    let newCodeBlock = makeElement("pre", undefined, classList);
                     finalElements.appendChild(newCodeBlock);
 
                     firstCodeLine = true;
