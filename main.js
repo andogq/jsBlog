@@ -18,7 +18,7 @@ let indentedCodeRegex = /^ {4}/g;
 let backTickCodeRegex = /^`{3}/g;
 let backTickCodeLanguageRegex = /^`{3} ?[\w\d]+/g;
 let ulRegex = /^ ?[*\-+]{1} /g
-let olRegex = /^ ?\d+\. /g;
+let olRegex = /^ ?(\d+)\. /g;
 let headingRegex = /^#+\s/g;
 
 // Adds a random id to the end of a URL, to prevent caching
@@ -272,6 +272,11 @@ function parseMarkdown(md) {
         else if (olRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             isIndentedCodeBlock = false;
+
+            // Get the starting number for the list
+            olRegex.lastIndex = 0;
+            let startNumber = olRegex.exec(line)[1];
+
             // Delete the symbol at the start
             line = line.replace(olRegex, "");
 
@@ -285,7 +290,9 @@ function parseMarkdown(md) {
             }
 
             // Make and append a li
-            finalElements.lastChild.appendChild(makeLi(line));
+            let newLi = makeLi(line);
+            newLi.value = startNumber;
+            finalElements.lastChild.appendChild(newLi);
         }
 
         // Ends the paragraph totally
