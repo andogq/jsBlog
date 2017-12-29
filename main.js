@@ -433,7 +433,7 @@ function displayFullPost(postId) {
 // Displays all the posts from the post list with a preview
 function displayPostList() {
     // For each post
-    for (postId in postList) {
+    for (postId=0; postId<postList.length; postId++) {
         let currentPost = postList[postId];
 
         // Get the md for the post
