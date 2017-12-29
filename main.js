@@ -85,6 +85,15 @@ function checkForInlineCode(line) {
     return line;
 }
 
+// Checks for any links in the line
+function checkForLinks(line) {
+    let regex = /\[(.+?)\]\((.+?)\)/g;
+    while (link = regex.exec(line)) {
+        line = line.replace(regex, "<a href=\"$2\">$1</a>");
+    }
+    return line;
+}
+
 // Turn markdown into html elements
 function parseMarkdown(md) {
     // Final elements
@@ -185,6 +194,7 @@ function parseMarkdown(md) {
 
             // Append a new element to it.
             line = checkForInlineCode(line);
+            line = checkForLinks(line);
             let newLi = makeElement("li", undefined, undefined, line)
             finalElements.lastChild.appendChild(newLi);
         }
@@ -208,6 +218,7 @@ function parseMarkdown(md) {
 
             // Append a new element to it.
             line = checkForInlineCode(line);
+            line = checkForLinks(line);
             let newLi = makeElement("li", undefined, undefined, line)
             finalElements.lastChild.appendChild(newLi);
         }
@@ -253,6 +264,7 @@ function parseMarkdown(md) {
                 isIndentedCodeBlock = false;
 
                 line = checkForInlineCode(line);
+                line = checkForLinks(line);
 
                 if (isParagraph) {
                     // Continuing on from another paragraph. Only add a line break
