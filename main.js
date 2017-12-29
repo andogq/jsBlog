@@ -357,7 +357,7 @@ function displayFullPost(postId) {
     // Make elements
     let postHeader = makeElement("div", "postHeader");
     let postHeading = makeElement("h1", "postHeading", undefined, currentPost.title);
-    let postDate = makeElement("p", undefined, ["date"], currentPost.date);
+    let postDate = makeElement("p", "postDate", undefined, currentPost.date);
     let postHr = makeElement("hr");
 
     // Append the elements
