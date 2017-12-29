@@ -1,0 +1,40 @@
+{
+    "title": "jsBlog",
+    "subtitle": "A static markdown blog",
+    "colors": {
+        "header": {
+            "background": "#FF6B15",
+            "text": "white"
+        },
+        "postPreview": {
+            "background": "#00B2B2",
+            "text": "white"
+        },
+        "post": {
+            "closeButton": "#FF6B15",
+            "heading": "#FF6B15",
+            "hr": "#00B2B2",
+            "h1": "#FF7B2E",
+            "h2": "#B24607",
+            "h3": "black",
+            "h4": "black",
+            "h5": "black",
+            "h6": "black",
+            "p": "black"
+        }
+    },
+    "fonts": {
+        "header": "sans-serif",
+        "postPreview": "sans-serif",
+        "post": {
+            "heading": "sans-serif",
+            "h1": "sans-serif",
+            "h2": "sans-serif",
+            "h3": "sans-serif",
+            "h4": "sans-serif",
+            "h5": "sans-serif",
+            "h6": "sans-serif",
+            "p": "serif"
+        }
+    }
+}
