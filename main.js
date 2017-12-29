@@ -85,6 +85,8 @@ function parseMarkdown(md) {
 
     // Used for terminating paragraph tags. Anything other than another blank line will break it
     let isParagraph = false;
+    // Used for grouping lists together. Either none, ul or ol.
+    let listType = "none";
 
     for (i in md) {
         // Line by line work out elements
@@ -93,7 +95,28 @@ function parseMarkdown(md) {
         // <hr/>
         if (/^[-_*]{3}/g.test(line)) {
             isParagraph = false;
+            listType = "none";
             finalElements.appendChild(makeElement("hr"));
+        }
+
+        // ul
+        else if (/^[*\-+]{1} /g.test(line)) {
+            isParagraph = false;
+            // Delete the symbol at the start
+            line = line.replace(/^[*\-+]{1} /g, "");
+
+            // If not already an ul
+            if (listType != "ul") {
+                // Make a new ul
+                let newUl = makeElement("ul");
+                finalElements.appendChild(newUl);
+
+                listType = "ul";
+            }
+
+            // Append a new element to it.
+            let newLi = makeElement("li", undefined, undefined, line)
+            finalElements.lastChild.appendChild(newLi);
         }
 
         // Ends the paragraph totally
@@ -104,6 +127,7 @@ function parseMarkdown(md) {
         // Headings
         else if (/^#/g.test(line)) {
             isParagraph = false;
+            listType = "none";
             // Determine the heading size
             let headingSize = line.split(" ")[0].length;
             headingSize > 6 ? headingSize = "h6": headingSize = "h" + headingSize;
@@ -118,8 +142,9 @@ function parseMarkdown(md) {
             finalElements.appendChild(heading);
         }
 
-        // Paragraphs
-        else {
+        // Paragraphs. Make sure that it isn't a random new line
+        else if (line != "") {
+            listType = "none";
             if (isParagraph) {
                 // Continuing on from another paragraph. Only add a line break
                 finalElements.lastChild.innerHTML += "<br/>" + line;
