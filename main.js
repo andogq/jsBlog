@@ -6,7 +6,7 @@ let divContent = document.getElementById("content");
 let postView = document.getElementById("postView");
 
 // Regular expressions
-let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
+let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}|^`{3}.*|`(.*?)`|!*\[(.*?)\]\(.*?\)/gm;
 let inlineCodeRegex = /`(.+?)`/g;
 let linkRegex = /\[(.+?)\]\((.+?)\)/g;
 let boldRegex = /[*_]{2}(.+?)[*_]{2}/g;
@@ -32,7 +32,7 @@ function stripAll(string) {
     // Trim white space
     string = string.trim();
 
-    string = string.replace(stripAllRegex, "$1$2");
+    string = string.replace(stripAllRegex, "$1$2$3$4");
 
     // Return string
     return string;
