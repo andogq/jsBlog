@@ -409,18 +409,21 @@ function displayPostList() {
             // Used for getting the post
             let offset = 0;
             for (i=0; i < 3; i++) {
-                // Line element
-                let previewLine = makeElement("p", undefined, undefined, stripAll(splitMdFile[offset]));
+                // Make sure that there's enough lines to preview
+                if (splitMdFile[offset]) {
+                    // Line element
+                    let previewLine = makeElement("p", undefined, undefined, stripAll(splitMdFile[offset]));
 
-                // If the line is blank (hr, code snippet etc)
-                if (previewLine.innerHTML == "") {
-                    i--;
+                    // If the line is blank (hr, code snippet etc)
+                    if (previewLine.innerHTML == "") {
+                        i--;
+                        offset++;
+                    }
                     offset++;
-                }
-                offset++;
 
-                // Append line to the parent div
-                preview.appendChild(previewLine);
+                    // Append line to the parent div
+                    preview.appendChild(previewLine);
+                }
             }
 
             // Append the preview
