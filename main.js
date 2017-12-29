@@ -124,6 +124,23 @@ function parseMarkdown(md) {
             finalElements.appendChild(makeElement("hr"));
         }
 
+        // Images
+        else if (/^!\[(.+?)\]\((.+?)\)/g.test(line) && !isCodeBlock) {
+            isParagraph = false;
+            listType = "none";
+            isCodeBlock = false;
+            isIndentedCodeBlock = false;
+
+            let imageData = /^!\[(.+?)\]\((.+?)\)/g.exec(line);
+
+            let newImage = makeElement("img");
+            newImage.alt = imageData[1];
+            newImage.src = imageData[2];
+            newImage.style.width = "100%";
+
+            finalElements.appendChild(newImage);
+        }
+
         // Code blocks with spaces
         else if (/^ {4}/g.test(line) && !isCodeBlock) {
             isParagraph = false;

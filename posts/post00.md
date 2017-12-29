@@ -6,6 +6,10 @@ here is some `code that is` pretty cool
 here are `two` more `bits`
 look `console.log("Hello")`. Cool right?
 ---
+## Here's a cool image that I like
+![A random image](img/random.jpeg)
+- Pretty cool huh?
+---
 ## Sub title
 That'll do
 here's a [link](you're welcome)
