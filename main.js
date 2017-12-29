@@ -347,6 +347,27 @@ function parseMarkdown(md) {
             finalElements.appendChild(heading);
         }
 
+        // Escaped line (with backslash)
+        else if (line[0] == "\\") {
+            line = line.replace(/^\\/g, "");
+
+            listType = "none";
+            isCodeBlock = false;
+            isIndentedCodeBlock = false;
+
+            line = checkForInline(line);
+
+            if (isParagraph) {
+                // Continuing on from another paragraph. Only add a line break
+                finalElements.lastChild.innerHTML += "<br/>" + line;
+            } else {
+                // New paragraph totally
+                isParagraph = true;
+                let paragraph = makeElement("p", undefined, undefined, line);
+                finalElements.appendChild(paragraph);
+            }
+        }
+
         // Paragraph or code block. Make sure that it isn't a random new line
         else if (line != "") {
             // Code block
@@ -412,7 +433,7 @@ function displayFullPost(postId) {
 // Displays all the posts from the post list with a preview
 function displayPostList() {
     // For each post
-    for (postId in postList) {
+    for (postId=0; postId<postList.length; postId++) {
         let currentPost = postList[postId];
 
         // Get the md for the post

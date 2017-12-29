@@ -10,7 +10,7 @@ File: posts/postList.txt
     ]                       --/                  assumed that this is in the posts/
 }                                                folder, but sub folders can be created
 ```
-2. Change the `title`, `date`, and `link` to whatever suits. __Note:__ The link is the name of the markdown file in the `posts/` folder. This means that sub folders can be created inside to store particular posts, aslong as the link matches up. This makes it easier to sort and organise posts.
+2. Copy the template to the top of the list (so that new posts are at the top), and change the `title`, `date`, and `link` to whatever suits. __Note:__ The link is the name of the markdown file in the `posts/` folder. This means that sub folders can be created inside to store particular posts, aslong as the link matches up. This makes it easier to sort and organise posts.
 3. Once the `posts/postLink.txt` file has been edited, it is time to create a file in the same location that you specified in the `link` section above. This is your markdown file, where the content of the post goes, and can be of any length. Details on the syntax of markdown that is supported is in the next post.
 4. Once you have your post complete, it is time to save it, and go back to the web-browser. Load up `index.html` in the root folder of this repo, and your posts should be there!
 ---
