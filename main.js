@@ -14,8 +14,8 @@ let imageRegex = /^!\[(.+?)\]\((.+?)\)/g;
 let indentedCodeRegex = /^ {4}/g;
 let backTickCodeRegex = /^`{3}/g;
 let backTickCodeLanguageRegex = /^`{3} ?[\w\d]+/g;
-let ulRegex = /^[*\-+]{1} /g
-let olRegex = /^\d+\. /g;
+let ulRegex = /^ ?[*\-+]{1} /g
+let olRegex = /^ ?\d+\. /g;
 let headingRegex = /^#+\s/g;
 
 // Adds a random id to the end of a URL, to prevent caching
