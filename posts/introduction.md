@@ -12,4 +12,5 @@ This tool isn't a full blogging framework. Due to the nature of static websites,
 At the moment to modify or add a post it is required that the user open the files and directly edit the contents themselves (more details on that later), an interface to generate the markdown is in the works, hold tight!
 ---
 # What's next?
+Clone the repo (`git clone https://github.com/tom-ando/jsBlog.git` or download from [here](https://github.com/tom-ando/jsBlog/archive/master.zip)) and implement it in any way that you would like, just put the folder where you would like the blog to be.
 Go back to the menu (the `x` in the top right corner), and look at other posts to learn about the syntax, customisation options, and how to make your own posts.

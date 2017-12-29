@@ -1,6 +1,6 @@
 {
     "title": "jsBlog",
-    "subtitle": "A static markdown blog",
+    "subtitle": "A static markdown blog, clone it on GitHub",
     "colors": {
         "header": {
             "background": "#FF6B15",
