@@ -6,7 +6,7 @@ let divContent = document.getElementById("content");
 let postView = document.getElementById("postView");
 
 // Regular expressions
-let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}/gm;
+let stripAllRegex = /^\s+|^[#]{1,}|^[-_*]{3,}|^[-+*]|[\*_]{1,2}(.+?)[\*_]{1,2}|~{2}(.+?)~{2}|^`{3}.*|`(.*?)`|!*\[(.*?)\]\(.*?\)/gm;
 let inlineCodeRegex = /`(.+?)`/g;
 let linkRegex = /\[(.+?)\]\((.+?)\)/g;
 let boldRegex = /[*_]{2}(.+?)[*_]{2}/g;
@@ -18,7 +18,7 @@ let indentedCodeRegex = /^ {4}/g;
 let backTickCodeRegex = /^`{3}/g;
 let backTickCodeLanguageRegex = /^`{3} ?[\w\d]+/g;
 let ulRegex = /^ ?[*\-+]{1} /g
-let olRegex = /^ ?\d+\. /g;
+let olRegex = /^ ?(\d+)\. /g;
 let headingRegex = /^#+\s/g;
 
 // Adds a random id to the end of a URL, to prevent caching
@@ -32,7 +32,7 @@ function stripAll(string) {
     // Trim white space
     string = string.trim();
 
-    string = string.replace(stripAllRegex, "$1$2");
+    string = string.replace(stripAllRegex, "$1$2$3$4");
 
     // Return string
     return string;
@@ -272,6 +272,11 @@ function parseMarkdown(md) {
         else if (olRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
             isIndentedCodeBlock = false;
+
+            // Get the starting number for the list
+            olRegex.lastIndex = 0;
+            let startNumber = olRegex.exec(line)[1];
+
             // Delete the symbol at the start
             line = line.replace(olRegex, "");
 
@@ -285,7 +290,9 @@ function parseMarkdown(md) {
             }
 
             // Make and append a li
-            finalElements.lastChild.appendChild(makeLi(line));
+            let newLi = makeLi(line);
+            newLi.value = startNumber;
+            finalElements.lastChild.appendChild(newLi);
         }
 
         // Ends the paragraph totally
@@ -406,12 +413,24 @@ function displayPostList() {
             // Preview items (only 3)
             // Break apart the md file for parsing line by line
             let splitMdFile = currentPost.md.split("\n");
+            // Used for getting the post
+            let offset = 0;
             for (i=0; i < 3; i++) {
-                // Line element
-                let previewLine = makeElement("p", undefined, undefined, stripAll(splitMdFile[i]));
+                // Make sure that there's enough lines to preview
+                if (splitMdFile[offset]) {
+                    // Line element
+                    let previewLine = makeElement("p", undefined, undefined, stripAll(splitMdFile[offset]));
 
-                // Append line to the parent div
-                preview.appendChild(previewLine);
+                    // If the line is blank (hr, code snippet etc)
+                    if (previewLine.innerHTML == "") {
+                        i--;
+                        offset++;
+                    }
+                    offset++;
+
+                    // Append line to the parent div
+                    preview.appendChild(previewLine);
+                }
             }
 
             // Append the preview
