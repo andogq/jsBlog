@@ -14,7 +14,7 @@ function generateEntry() {
         date: date,
         link: link
     }
-    let posts = require(path.join(__dirname, "./posts/postList.json"))
+    let posts = require(path.join(__dirname, "posts/postList.json"))
     posts.push(entry)
     fs.writeFileSync(path.join(__dirname, "posts/postList.json"), JSON.stringify(posts, null, 4))
     fs.writeFileSync(path.join(__dirname, "posts/" + link), "# " + title + "\n")
