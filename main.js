@@ -473,7 +473,7 @@ function displayPostList() {
 
 // Sends request for the post list
 function loadPostList() {
-    getFile("posts/postList.txt", function(response) {
+    getFile("posts/postList.json", function(response) {
         postList = JSON.parse(response);
         displayPostList();
     });
