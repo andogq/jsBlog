@@ -87,6 +87,8 @@ function parseMarkdown(md) {
     let isParagraph = false;
     // Used for grouping lists together. Either none, ul or ol.
     let listType = "none";
+    // For code blocks
+    let isCodeBlock = false;
 
     for (i in md) {
         // Line by line work out elements
@@ -96,12 +98,37 @@ function parseMarkdown(md) {
         if (/^[-_*]{3}/g.test(line)) {
             isParagraph = false;
             listType = "none";
+            isCodeBlock = false;
             finalElements.appendChild(makeElement("hr"));
+        }
+
+        // Code blocks
+        else if (/^ {4}/g.test(line)) {
+            isParagraph = false;
+            listType = "none";
+            // Replace the spaces at the start of the line with a new line
+            line = line.replace(/^ {4}/g, "\n");
+
+            // If it's not already in a code block, make a new one
+            if (!isCodeBlock) {
+                // Make a new code block and append it
+                let newCodeBlock = makeElement("pre", undefined, ["prettyprint", "linenums"]);
+                finalElements.appendChild(newCodeBlock);
+
+                // Removes the extra new line at the start
+                line = line.replace("\n", "");
+
+                isCodeBlock = true;
+            }
+
+            // Add the line to the code block
+            finalElements.lastChild.innerHTML += line;
         }
 
         // ul
         else if (/^[*\-+]{1} /g.test(line)) {
             isParagraph = false;
+            isCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(/^[*\-+]{1} /g, "");
 
@@ -122,6 +149,7 @@ function parseMarkdown(md) {
         // ul
         else if (/^\d+\. /g.test(line)) {
             isParagraph = false;
+            isCodeBlock = false;
             // Delete the symbol at the start
             line = line.replace(/^\d+\. /g, "");
 
@@ -147,6 +175,7 @@ function parseMarkdown(md) {
         // Headings
         else if (/^#/g.test(line)) {
             isParagraph = false;
+            isCodeBlock = false;
             listType = "none";
             // Determine the heading size
             let headingSize = line.split(" ")[0].length;
@@ -165,6 +194,7 @@ function parseMarkdown(md) {
         // Paragraphs. Make sure that it isn't a random new line
         else if (line != "") {
             listType = "none";
+            isCodeBlock = false;
             if (isParagraph) {
                 // Continuing on from another paragraph. Only add a line break
                 finalElements.lastChild.innerHTML += "<br/>" + line;
@@ -204,8 +234,9 @@ function displayFullPost(postId) {
     // Do the markdown
     let parsedMd = parseMarkdown(currentPost.md);
     parsedMd.id = "postContent";
-
     postView.appendChild(parsedMd);
+    // Run prettify (if needed)
+    PR.prettyPrint();
 }
 
 // Displays all the posts from the post list with a preview

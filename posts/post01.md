@@ -5,3 +5,10 @@ Hopefully this works
 ---
 # It should be good
 yeah
+    console.log("hello");
+    function display(word) {
+        if (!word) {
+            word = "world";
+        }
+        console.log(word);
+    }
