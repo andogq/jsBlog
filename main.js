@@ -170,6 +170,22 @@ function parseMarkdown(md) {
         // Line by line work out elements
         let line = md[i];
 
+        // Reset the regexs each time
+        stripAllRegex.lastIndex = 0;
+        inlineCodeRegex.lastIndex = 0;
+        linkRegex.lastIndex = 0;
+        boldRegex.lastIndex = 0;
+        italicRegex.lastIndex = 0;
+        boldItalicRegex.lastIndex = 0;
+        hrRegex.lastIndex = 0;
+        imageRegex.lastIndex = 0;
+        indentedCodeRegex.lastIndex = 0;
+        backTickCodeRegex.lastIndex = 0;
+        backTickCodeLanguageRegex.lastIndex = 0;
+        ulRegex.lastIndex = 0;
+        olRegex.lastIndex = 0;
+        headingRegex.lastIndex = 0;
+
         // <hr/>
         if (hrRegex.test(line) && !isCodeBlock) {
             isParagraph = false;
@@ -229,7 +245,6 @@ function parseMarkdown(md) {
                 if (!isCodeBlock) {
                     // Check if a language is supplied
                     let language;
-                    backTickCodeLanguageRegex.lastIndex = 0;
                     if (backTickCodeLanguageRegex.test(line)) {
                         // Extract the language
                         backTickCodeLanguageRegex.lastIndex = 0;
