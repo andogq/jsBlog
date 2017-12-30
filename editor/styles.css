@@ -35,7 +35,7 @@
 }
 
 .btn-primary {
-  background: blue;
+  background: #00aadd;
   color: white;
 }
 @keyframes slidefade {
@@ -56,7 +56,7 @@
 
 .modal-header, .modal-footer {
   padding: 2px 16px;
-  background: #00ccee;
+  background: #00aadd;
   color: white;
 }
 
