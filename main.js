@@ -547,7 +547,7 @@ function loadConfig() {
         // hr
         stylesheet.innerHTML += "#postView hr{border-color:" + postColors.hr + "}";
         // h1
-        stylesheet.innerHTML += "#postView h1{color:" + postColors.h1 + ";font-family:" + postFonts.h1 + "}";
+        stylesheet.innerHTML += "#postContent h1{color:" + postColors.h1 + ";font-family:" + postFonts.h1 + "}";
         // h2
         stylesheet.innerHTML += "#postContent h2{color:" + postColors.h2 + ";font-family:" + postFonts.h2 + "}";
         // h3
