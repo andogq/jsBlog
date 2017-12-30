@@ -211,7 +211,8 @@ function parseMarkdown(md) {
             let newImage = makeElement("img");
             newImage.alt = imageData[1];
             newImage.src = imageData[2];
-            newImage.style.width = "100%";
+            newImage.style.width = "30%";
+            newImage.style.marginLeft = "35%"; 
 
             finalElements.appendChild(newImage);
         }
