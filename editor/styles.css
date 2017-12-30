@@ -1,7 +1,7 @@
 .container {
-  width: calc(100%-1em);
+  width: calc(100%-10%);
   height: 100%;
-  margin: 0 1em;
+  margin: 0 10%;
 }
 .form-group {
   display: block;
@@ -13,7 +13,7 @@
 }
 .form-group .form-control {
   display: block;
-  width: 100%;
+  max-width: 200px;
   border: 1px solid grey;
   border-radius: 5px;
   height: 2em;
@@ -100,5 +100,9 @@
 @media screen and (max-width: 720px) {
   .modal-content {
     width: 100%;
+  }
+  .form-group .form-control {
+    width: 100%;
+    max-width: 100%;
   }
 }
