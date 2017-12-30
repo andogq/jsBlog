@@ -13,7 +13,7 @@ var regexNonAlphanum = /(\s+|[!@#\$%^&*()+=`~{}\][\\'":;?/\.,<>]+)/; // - and _ 
 var regexDate = /(\d{2}\/){2}\d{2}/;
 function getToday() {
   var today = new Date();
-  return today.getDate() + '/' + ((today.getMonth() + 1).toString().padStart(2, '0')) + '/' + today.getFullYear().toString().substr(2);
+  return (today.getDate().toString().padStart(2, '0')) + '/' + ((today.getMonth() + 1).toString().padStart(2, '0')) + '/' + today.getFullYear().toString().substr(2);
 }
 function openModal() {
   modal.style.display = "block";
