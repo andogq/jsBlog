@@ -1,0 +1,4 @@
+*~
+*.orig
+node_modules/
+*.swp
